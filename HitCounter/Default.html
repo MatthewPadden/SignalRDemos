@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.1.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            // New an instance of SignalR hub
+            var connection = new $.hubConnection();
+            var hub = connection.createHubProxy("hitCounter");
+
+            /* SignalR fires this from the server through generated JavaScript
+             * and updates the text of hitCount div with number of connections */
+            hub.on("onRecordHit", function (hitCount) {
+                $('#hitCountValue').text(hitCount);
+            });
+
+            // Starts the SignalR connection
+            connection.start(function () {
+                hub.invoke('recordHit');
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <p id="hitCountValue">0</p>
+</body>
+</html>
